@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\_my_portfolio_\\Backend\\2. University Management Core Program\\jikmunn-university-management-core-program\\logs\\winston\\successes\\.ac16345363b593ac98b13b32cb0f0a5505bbeb49-audit.json",
+    "files": [
+        {
+            "date": 1728834335443,
+            "name": "D:\\_my_portfolio_\\Backend\\2. University Management Core Program\\jikmunn-university-management-core-program\\logs\\winston\\successes\\jikmunn-university-management-2024-13-10-21-success.log",
+            "hash": "fdc624a8c672b2142ec60c7a12cfc8bf8dad287648308608505837a8f29afbdc"
+        }
+    ],
+    "hashType": "sha256"
+}
