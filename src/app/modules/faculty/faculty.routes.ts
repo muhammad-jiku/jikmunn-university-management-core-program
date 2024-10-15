@@ -28,4 +28,20 @@ router
     FacultyControllers.deleteByIdFromDB,
   );
 
+router
+  .route("/:id/assign-courses")
+  .post(
+    validateRequest(FacultyValidations.assignOrRemoveCourses),
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+    FacultyControllers.assignCourses,
+  );
+
+router
+  .route("/:id/remove-courses")
+  .delete(
+    validateRequest(FacultyValidations.assignOrRemoveCourses),
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+    FacultyControllers.removeCourses,
+  );
+
 export const FacultyRoutes = router;
