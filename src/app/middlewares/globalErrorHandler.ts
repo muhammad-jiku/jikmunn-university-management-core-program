@@ -1,8 +1,9 @@
+import { Prisma } from "@prisma/client";
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import config from "../../config";
 import ApiError from "../../errors/handleApiError";
-import handleCastError from "../../errors/handleCastError";
+import handleClientError from "../../errors/handleClientError";
 import handleValidationError from "../../errors/handleValidationError";
 import handleZodError from "../../errors/handleZodError";
 import { IGenericErrorMessage } from "../../interfaces/error";
@@ -22,13 +23,13 @@ const globalErrorHandler: ErrorRequestHandler = (
   let message = "Something went wrong!";
   let errorMessages: IGenericErrorMessage[] = [];
 
-  if (err?.name === "ValidationError") {
+  if (err instanceof Prisma.PrismaClientValidationError) {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
-  } else if (err?.name === "CastError") {
-    const simplifiedError = handleCastError(err);
+  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    const simplifiedError = handleClientError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
