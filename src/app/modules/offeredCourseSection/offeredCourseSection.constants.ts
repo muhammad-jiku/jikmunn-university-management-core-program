@@ -11,6 +11,7 @@ export const offeredCourseSectionRelationalFields: string[] = [
   "offeredCourseId",
   "semesterRegistrationId",
 ];
+
 export const offeredCourseSectionRelationalFieldsMapper: {
   [key: string]: string;
 } = {

@@ -1,13 +1,10 @@
 import { Prisma } from "@prisma/client";
-import {
-  IGenericErrorMessage,
-  IGenericErrorResponse,
-} from "../interfaces/error";
+import { IGenericErrorResponse } from "../interfaces/error";
 
 const handleValidationError = (
   err: Prisma.PrismaClientValidationError,
 ): IGenericErrorResponse => {
-  const errors: IGenericErrorMessage[] = [
+  const errors = [
     {
       path: "",
       message: err.message,

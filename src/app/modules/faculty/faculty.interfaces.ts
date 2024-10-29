@@ -7,5 +7,10 @@ export type IFacultyFilterRequest = {
   contactNo?: string | undefined;
   gender?: string | undefined;
   bloodGroup?: string | undefined;
-  designation?: string | undefined;
+};
+
+export type IFacultyMyCourseStudentsRequest = {
+  academicSemesterId?: string | undefined;
+  courseId?: string | undefined;
+  offeredCourseSectionId?: string | undefined;
 };

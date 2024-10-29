@@ -8,6 +8,50 @@ import { SemesterRegistrationValidations } from "./semRegistration.validations";
 const router = express.Router();
 
 router
+  .route("/start-registration")
+  .post(
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.startMyRegistration,
+  );
+
+router
+  .route("/get-my-registration")
+  .get(
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.getMyRegistration,
+  );
+
+router
+  .route("/enroll-into-course")
+  .post(
+    validateRequest(SemesterRegistrationValidations.enrollOrWithdrawCourse),
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.enrollIntoCourse,
+  );
+
+router
+  .route("/withdraw-from-course")
+  .post(
+    validateRequest(SemesterRegistrationValidations.enrollOrWithdrawCourse),
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.withdrawFromCourse,
+  );
+
+router
+  .route("/confirm-my-registration")
+  .post(
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.confirmMyRegistration,
+  );
+
+router
+  .route("/get-my-semsester-courses")
+  .get(
+    auth(USER_ROLES.STUDENT),
+    SemesterRegistrationControllers.getMySemesterRegCouses,
+  );
+
+router
   .route("/")
   .post(
     validateRequest(SemesterRegistrationValidations.createSemesterRegistration),
@@ -15,13 +59,6 @@ router
     SemesterRegistrationControllers.insertIntoDB,
   )
   .get(SemesterRegistrationControllers.getAllFromDB);
-
-router
-  .route("/start-registration")
-  .post(
-    auth(USER_ROLES.STUDENT),
-    SemesterRegistrationControllers.startMyRegistration,
-  );
 
 router
   .route("/:id")
@@ -34,6 +71,13 @@ router
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
     SemesterRegistrationControllers.deleteByIdFromDB,
+  );
+
+router
+  .route("/:id/start-new-semester")
+  .post(
+    auth(USER_ROLES.ADMIN),
+    SemesterRegistrationControllers.startNewSemester,
   );
 
 export const SemesterRegistrationRoutes = router;

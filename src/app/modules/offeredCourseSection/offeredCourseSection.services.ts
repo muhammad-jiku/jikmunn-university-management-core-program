@@ -32,7 +32,7 @@ const insertIntoDB = async (
   if (!isExistOfferedCourse) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
-      "Offered course does not exist!",
+      "Offered Course does not exist!",
     );
   }
 
@@ -198,14 +198,15 @@ const getByIdFromDB = async (
       },
     },
   });
+
   return result;
 };
 
+// update
 const updateOneInDB = async (
   id: string,
   payload: Partial<OfferedCourseSection>,
 ): Promise<OfferedCourseSection> => {
-  //update
   const result = await prisma.offeredCourseSection.update({
     where: {
       id,
@@ -219,6 +220,7 @@ const updateOneInDB = async (
       },
     },
   });
+
   return result;
 };
 

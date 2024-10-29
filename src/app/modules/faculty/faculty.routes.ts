@@ -16,6 +16,14 @@ router
   .get(FacultyControllers.getAllFromDB);
 
 router
+  .route("/my-courses")
+  .get(auth(USER_ROLES.FACULTY), FacultyControllers.myCourses);
+
+router
+  .route("/my-course-students")
+  .get(auth(USER_ROLES.FACULTY), FacultyControllers.getMyCourseStudents);
+
+router
   .route("/:id")
   .get(FacultyControllers.getByIdFromDB)
   .patch(

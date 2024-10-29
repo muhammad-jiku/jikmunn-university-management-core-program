@@ -89,6 +89,101 @@ const startMyRegistration = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const enrollIntoCourse = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+
+  const result = await SemesterRegistrationServices.enrollIntoCourse(
+    user!.userId,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Student semester registration course enrolled successfully!!",
+    data: result,
+  });
+});
+
+const withdrawFromCourse = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+
+  const result = await SemesterRegistrationServices.withdrewFromCourse(
+    user!.userId,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Student withdraw from the course successfully!!",
+    data: result,
+  });
+});
+
+const confirmMyRegistration = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+
+    const result = await SemesterRegistrationServices.confirmMyRegistration(
+      user!.userId,
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Confirm your registration!",
+      data: result,
+    });
+  },
+);
+
+const getMyRegistration = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+
+  const result = await SemesterRegistrationServices.getMyRegistration(
+    user!.userId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "My registration data fatched!",
+    data: result,
+  });
+});
+
+const startNewSemester = catchAsync(async (req: Request, res: Response) => {
+  // /:id/start-new-semester
+  const { id } = req.params;
+
+  const result = await SemesterRegistrationServices.startNewSemester(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Semester started successfully!",
+    data: result,
+  });
+});
+
+const getMySemesterRegCouses = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+
+    const result = await SemesterRegistrationServices.getMySemesterRegCouses(
+      user!.userId,
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "My registration courses data fatched successfully!!",
+      data: result,
+    });
+  },
+);
+
 export const SemesterRegistrationControllers = {
   insertIntoDB,
   getAllFromDB,
@@ -96,4 +191,10 @@ export const SemesterRegistrationControllers = {
   updateOneInDB,
   deleteByIdFromDB,
   startMyRegistration,
+  enrollIntoCourse,
+  withdrawFromCourse,
+  confirmMyRegistration,
+  getMyRegistration,
+  startNewSemester,
+  getMySemesterRegCouses,
 };
