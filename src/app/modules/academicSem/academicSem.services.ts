@@ -5,15 +5,27 @@ import { paginationHelpers } from "../../../helpers/paginationHelpers";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { prisma } from "../../../shared/prisma";
+import { RedisClient } from "../../../shared/redis";
 import {
   academicSemesterSearchableFields,
   academicSemesterTitleCodeMapper,
+  EVENT_ACADEMIC_SEMESTER_CREATED,
+  EVENT_ACADEMIC_SEMESTER_DELETED,
+  EVENT_ACADEMIC_SEMESTER_UPDATED,
 } from "./academicSem.constants";
 import { IAcademicSemesterFilterRequest } from "./academicSem.interfaces";
+import { validateDuplicateSemester } from "./academicSem.utils";
 
 const insertIntoDB = async (
   academicSemesterData: AcademicSemester,
 ): Promise<AcademicSemester> => {
+  // Validate for duplicates
+  await validateDuplicateSemester(
+    academicSemesterData.title,
+    academicSemesterData.year,
+  );
+
+  // Check code validity
   if (
     academicSemesterTitleCodeMapper[academicSemesterData.title] !==
     academicSemesterData.code
@@ -26,6 +38,13 @@ const insertIntoDB = async (
   });
 
   console.log(result, "result core");
+
+  if (result) {
+    await RedisClient.publish(
+      EVENT_ACADEMIC_SEMESTER_CREATED,
+      JSON.stringify(result),
+    );
+  }
 
   return result;
 };
@@ -95,7 +114,7 @@ const getAllFromDB = async (
   };
 };
 
-const getDataById = async (id: string): Promise<AcademicSemester | null> => {
+const getByIdFromDB = async (id: string): Promise<AcademicSemester | null> => {
   const result = await prisma.academicSemester.findUnique({
     where: {
       id,
@@ -115,7 +134,12 @@ const updateOneInDB = async (
     },
     data: payload,
   });
-
+  if (result) {
+    await RedisClient.publish(
+      EVENT_ACADEMIC_SEMESTER_UPDATED,
+      JSON.stringify(result),
+    );
+  }
   return result;
 };
 
@@ -126,13 +150,19 @@ const deleteByIdFromDB = async (id: string): Promise<AcademicSemester> => {
     },
   });
 
+  if (result) {
+    await RedisClient.publish(
+      EVENT_ACADEMIC_SEMESTER_DELETED,
+      JSON.stringify(result),
+    );
+  }
   return result;
 };
 
 export const AcademicSemesterServices = {
   insertIntoDB,
   getAllFromDB,
-  getDataById,
+  getByIdFromDB,
   updateOneInDB,
   deleteByIdFromDB,
 };

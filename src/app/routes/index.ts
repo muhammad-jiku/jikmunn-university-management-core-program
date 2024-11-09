@@ -2,6 +2,8 @@ import express from "express";
 import { AcademicDepartmentRoutes } from "../modules/academicDept/academicDept.routes";
 import { AcademicFacultyRoutes } from "../modules/academicFaculty/academicFaculty.routes";
 import { AcademicSemesterRoutes } from "../modules/academicSem/academicSem.routes";
+import { AdminRoutes } from "../modules/admin/admin.routes";
+import { AuthRoutes } from "../modules/auth/auth.routes";
 import { BuildingRoutes } from "../modules/building/building.routes";
 import { CourseRoutes } from "../modules/course/course.routes";
 import { FacultyRoutes } from "../modules/faculty/faculty.routes";
@@ -12,6 +14,7 @@ import { RoomRoutes } from "../modules/room/room.routes";
 import { SemesterRegistrationRoutes } from "../modules/semRegistration/semRegistration.routes";
 import { StudentRoutes } from "../modules/student/student.routes";
 import { StudentEnrolledCourseMarkRoutes } from "../modules/studentEnrolledCourseMark/studentEnrolledCourseMark.routes";
+import { UserRoutes } from "../modules/user/user.routes";
 
 const router = express.Router();
 
@@ -30,12 +33,24 @@ const moduleRoutes = [
     route: AcademicDepartmentRoutes,
   },
   {
-    path: "/faculties",
-    route: FacultyRoutes,
+    path: "/users",
+    route: UserRoutes,
+  },
+  {
+    path: "/auth",
+    route: AuthRoutes,
   },
   {
     path: "/students",
     route: StudentRoutes,
+  },
+  {
+    path: "/faculties",
+    route: FacultyRoutes,
+  },
+  {
+    path: "/admins",
+    route: AdminRoutes,
   },
   {
     path: "/buildings",

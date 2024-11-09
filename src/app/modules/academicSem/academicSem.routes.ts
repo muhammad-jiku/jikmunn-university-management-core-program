@@ -11,14 +11,14 @@ router
   .route("/")
   .post(
     validateRequest(AcademicSemesterValidations.createAcademicSemester),
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
     AcademicSemeterControllers.insertIntoDB,
   )
   .get(AcademicSemeterControllers.getAllFromDB);
 
 router
   .route("/:id")
-  .get(AcademicSemeterControllers.getDataById)
+  .get(AcademicSemeterControllers.getByIdFromDB)
   .patch(
     validateRequest(AcademicSemesterValidations.updateAcademicSemester),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),

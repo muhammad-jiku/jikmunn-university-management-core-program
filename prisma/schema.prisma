@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Models
 model AcademicSemester {
   id                         String                      @id @default(uuid())
   year                       Int
@@ -34,19 +35,19 @@ model AcademicSemester {
 
 model AcademicFaculty {
   id                  String               @id @default(uuid())
-  title               String
+  title               String               @unique
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   academicDepartments AcademicDepartment[]
   students            Student[]
   faculties           Faculty[]
 
-  @@map("academic_faculty")
+  @@map("academic_faculties")
 }
 
 model AcademicDepartment {
   id                String          @id @default(uuid())
-  title             String
+  title             String          @unique
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
   academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
@@ -60,15 +61,15 @@ model AcademicDepartment {
 
 model Student {
   id                                 String                              @id @default(uuid())
-  studentId                          String
+  studentId                          String                              @unique
   firstName                          String
   lastName                           String
   middleName                         String
   profileImage                       String?
-  email                              String
-  contactNo                          String
-  gender                             String
-  bloodGroup                         String
+  email                              String                              @unique
+  contactNo                          String                              @unique
+  gender                             Gender
+  bloodGroup                         BloodGroup
   createdAt                          DateTime                            @default(now())
   updatedAt                          DateTime                            @updatedAt
   academicSemester                   AcademicSemester                    @relation(fields: [academicSemesterId], references: [id])
@@ -83,21 +84,22 @@ model Student {
   studentEnrolledCourseMarks         StudentEnrolledCourseMark[]
   studentSemesterPayments            StudentSemesterPayment[]
   studentAcademicInfos               StudentAcademicInfo[]
+  user                               User?                               @relation("StudentUser") // Define only the relation name here
 
   @@map("students")
 }
 
 model Faculty {
   id                          String                       @id @default(uuid())
-  facultyId                   String
+  facultyId                   String                       @unique
   firstName                   String
   lastName                    String
   middleName                  String
-  profileImage                String
-  email                       String
-  contactNo                   String
-  gender                      String
-  bloodGroup                  String
+  profileImage                String?
+  email                       String                       @unique
+  contactNo                   String                       @unique
+  gender                      Gender
+  bloodGroup                  BloodGroup
   designation                 String
   createdAt                   DateTime                     @default(now())
   updatedAt                   DateTime                     @updatedAt
@@ -107,13 +109,64 @@ model Faculty {
   academicFacultyId           String
   courses                     CourseFaculty[]
   offeredCourseClassSchedules OfferedCourseClassSchedule[]
+  user                        User?                        @relation("FacultyUser") // Define only the relation name here
 
   @@map("faculties")
 }
 
-model Building {
+model Admin {
+  id               String         @id @default(uuid())
+  adminId          String         @unique
+  firstName        String
+  middleName       String?
+  lastName         String
+  profileImage     String?
+  email            String         @unique
+  contactNo        String         @unique
+  gender           Gender
+  bloodGroup       BloodGroup
+  designation      String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  managementDeptId String
+  managementDept   ManagementDept @relation(fields: [managementDeptId], references: [id])
+  user             User?          @relation("AdminUser") // Define only the relation name here
+
+  @@map("admins")
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  role                UserRole
+  password            String
+  needsPasswordChange Boolean   @default(true)
+  passwordChangedAt   DateTime?
+  studentId           String?   @unique // Foreign key to Student
+  student             Student?  @relation("StudentUser", fields: [studentId], references: [studentId]) // Define fields and references only on this side
+  facultyId           String?   @unique // Foreign key to Faculty
+  faculty             Faculty?  @relation("FacultyUser", fields: [facultyId], references: [facultyId]) // Define fields and references only on this side
+  adminId             String?   @unique // Foreign key to Admin
+  admin               Admin?    @relation("AdminUser", fields: [adminId], references: [adminId]) // Define fields and references only on this side
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model ManagementDept {
   id        String   @id @default(uuid())
   title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admins    Admin[]
+
+  @@map("management_departments")
+}
+
+model Building {
+  id        String   @id @default(uuid())
+  title     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   rooms     Room[]
@@ -136,8 +189,8 @@ model Room {
 
 model Course {
   id                     String                  @id @default(uuid())
-  title                  String
-  code                   String
+  title                  String                  @unique
+  code                   String                  @unique
   credits                Int                     @default(0)
   createdAt              DateTime                @default(now())
   updatedAt              DateTime                @updatedAt
@@ -331,12 +384,11 @@ model StudentSemesterPaymentHistory {
   updatedAt                DateTime               @updatedAt
   studentSemesterPayment   StudentSemesterPayment @relation(fields: [studentSemesterPaymentId], references: [id])
   studentSemesterPaymentId String
-
-  transactionId String
-  dueAmount     Int            @default(0)
-  paidAmount    Int            @default(0)
-  paymentMethod PayementMethod @default(ONLINE)
-  isPaid        Boolean?       @default(false)
+  transactionId            String
+  dueAmount                Int                    @default(0)
+  paidAmount               Int                    @default(0)
+  paymentMethod            PaymentMethod          @default(ONLINE)
+  isPaid                   Boolean?               @default(false)
 
   @@map("student_semester_payament_histories")
 }
@@ -351,6 +403,29 @@ model StudentAcademicInfo {
   cgpa                 Float?   @default(0)
 
   @@map("student_academic_infos")
+}
+
+// Enums
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum BloodGroup {
+  A_POS
+  A_NEG
+  B_POS
+  B_NEG
+  AB_POS
+  AB_NEG
+  O_POS
+  O_NEG
+}
+
+enum UserRole {
+  STUDENT
+  FACULTY
+  ADMIN
 }
 
 enum SemesterRegistrationStatus {
@@ -386,7 +461,7 @@ enum PaymentStatus {
   FULL_PAID
 }
 
-enum PayementMethod {
+enum PaymentMethod {
   CASH
   ONLINE
 }

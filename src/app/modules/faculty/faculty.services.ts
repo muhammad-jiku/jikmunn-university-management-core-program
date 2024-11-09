@@ -1,4 +1,5 @@
 import { CourseFaculty, Faculty, Prisma, Student } from "@prisma/client";
+import { JwtPayload } from "jsonwebtoken";
 import { paginationHelpers } from "../../../helpers/paginationHelpers";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
@@ -13,17 +14,16 @@ import {
   IFacultyMyCourseStudentsRequest,
 } from "./faculty.interfaces";
 
-const insertIntoDB = async (data: Faculty): Promise<Faculty> => {
-  const result = await prisma.faculty.create({
-    data,
-    include: {
-      academicFaculty: true,
-      academicDepartment: true,
-    },
-  });
-
-  return result;
-};
+// const insertIntoDB = async (data: Faculty): Promise<Faculty> => {
+//   const result = await prisma.faculty.create({
+//     data,
+//     include: {
+//       academicFaculty: true,
+//       academicDepartment: true,
+//     },
+//   });
+//   return result;
+// };
 
 const getAllFromDB = async (
   filters: IFacultyFilterRequest,
@@ -192,10 +192,11 @@ const removeCourses = async (
 };
 
 const myCourses = async (
-  authUser: {
-    userId: string;
-    role: string;
-  },
+  authUser: JwtPayload | null,
+  // authUser: {
+  //   userId: string;
+  //   role: string;
+  // },
   filter: {
     academicSemesterId?: string | null | undefined;
     courseId?: string | null | undefined;
@@ -216,7 +217,7 @@ const myCourses = async (
       offeredCourseClassSchedules: {
         some: {
           faculty: {
-            facultyId: authUser.userId,
+            facultyId: authUser!.userId,
           },
         },
       },
@@ -359,8 +360,64 @@ const getMyCourseStudents = async (
   };
 };
 
+// const createFacultyFromEvent = async (
+//   e: FacultyCreatedEvent
+// ): Promise<void> => {
+//   const faculty: Partial<Faculty> = {
+//     facultyId: e.id,
+//     firstName: e.name.firstName,
+//     lastName: e.name.lastName,
+//     middleName: e.name.middleName,
+//     profileImage: e.profileImage,
+//     email: e.email,
+//     contactNo: e.contactNo,
+//     gender: e.gender,
+//     bloodGroup: e.bloodGroup,
+//     designation: e.designation,
+//     academicDepartmentId: e.academicDepartment.syncId,
+//     academicFacultyId: e.academicFaculty.syncId,
+//   };
+
+//   const data = await insertIntoDB(faculty as Faculty);
+//   console.log('RES: ', data);
+// };
+
+// const updateFacultyFromEvent = async (e: any): Promise<void> => {
+//   const isExist = await prisma.faculty.findFirst({
+//     where: {
+//       facultyId: e.id,
+//     },
+//   });
+//   if (!isExist) {
+//     createFacultyFromEvent(e);
+//   } else {
+//     const facultyData: Partial<Faculty> = {
+//       facultyId: e.id,
+//       firstName: e.name.firstName,
+//       lastName: e.name.lastName,
+//       middleName: e.name.middleName,
+//       profileImage: e.profileImage,
+//       email: e.email,
+//       contactNo: e.contactNo,
+//       gender: e.gender,
+//       bloodGroup: e.bloodGroup,
+//       designation: e.designation,
+//       academicDepartmentId: e.academicDepartment.syncId,
+//       academicFacultyId: e.academicFaculty.syncId,
+//     };
+
+//     const res = await prisma.faculty.updateMany({
+//       where: {
+//         facultyId: e.id,
+//       },
+//       data: facultyData,
+//     });
+//     console.log(res);
+//   }
+// };
+
 export const FacultyServices = {
-  insertIntoDB,
+  // insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
@@ -369,4 +426,6 @@ export const FacultyServices = {
   removeCourses,
   myCourses,
   getMyCourseStudents,
+  // createFacultyFromEvent,
+  // updateFacultyFromEvent,
 };

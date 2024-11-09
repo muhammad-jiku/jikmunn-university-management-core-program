@@ -7,13 +7,7 @@ import { FacultyValidations } from "./faculty.validations";
 
 const router = express.Router();
 
-router
-  .route("/")
-  .post(
-    validateRequest(FacultyValidations.createFaculty),
-    FacultyControllers.insertIntoDB,
-  )
-  .get(FacultyControllers.getAllFromDB);
+router.route("/").get(FacultyControllers.getAllFromDB);
 
 router
   .route("/my-courses")

@@ -9,11 +9,11 @@ const router = express.Router();
 
 router
   .route("/")
-  .post(
-    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    validateRequest(StudentValidations.createStudent),
-    StudentControllers.insertIntoDB,
-  )
+  // .post(
+  //   auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+  //   validateRequest(StudentValidations.createStudent),
+  //   StudentControllers.insertIntoDB,
+  // )
   .get(StudentControllers.getAllFromDB);
 
 router

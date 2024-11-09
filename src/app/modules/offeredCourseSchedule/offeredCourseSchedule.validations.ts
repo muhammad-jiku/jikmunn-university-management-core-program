@@ -14,22 +14,24 @@ const timeStringSchema = z.string().refine(
 
 const createOfferedCourseClassSchedule = z
   .object({
-    body: z.object({
-      dayOfWeek: z.enum([...daysInWeek] as [string, ...string[]], {
-        required_error: "Day of week is required",
-      }),
-      startTime: timeStringSchema,
-      endTime: timeStringSchema,
-      roomId: z.string({
-        required_error: "Room id is required",
-      }),
-      facultyId: z.string({
-        required_error: "Faculty id is required",
-      }),
-      offeredCourseSectionId: z.string({
-        required_error: "Section id is required",
-      }),
-    }),
+    body: z
+      .object({
+        dayOfWeek: z.enum([...daysInWeek] as [string, ...string[]], {
+          required_error: "Day of week is required",
+        }),
+        startTime: timeStringSchema,
+        endTime: timeStringSchema,
+        roomId: z.string({
+          required_error: "Room id is required",
+        }),
+        facultyId: z.string({
+          required_error: "Faculty id is required",
+        }),
+        offeredCourseSectionId: z.string({
+          required_error: "Section id is required",
+        }),
+      })
+      .strict(),
   })
   .refine(
     ({ body }) => {
@@ -44,11 +46,14 @@ const createOfferedCourseClassSchedule = z
   );
 
 const updateOfferedCourseClassSchedule = z.object({
-  body: z.object({
-    roomId: z.string().optional(),
-    facultyId: z.string().optional(),
-    offeredCourseSectionId: z.string().optional(),
-  }),
+  body: z
+    .object({
+      roomId: z.string().optional(),
+      facultyId: z.string().optional(),
+      offeredCourseSectionId: z.string().optional(),
+    })
+    .strict()
+    .optional(),
 });
 
 export const OfferedCourseClassScheduleValidations = {
