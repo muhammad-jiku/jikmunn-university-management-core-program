@@ -3,8 +3,7 @@ import { createLogger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 const { combine, timestamp, label, printf } = format;
 
-//Customm Log Format
-
+// Customm Log Format
 const myFormat = printf(({ level, message, label, timestamp }) => {
   const date = new Date(timestamp);
   const hour = date.getHours();
@@ -16,7 +15,7 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 const logger = createLogger({
   level: "info",
   format: combine(
-    label({ label: "JIKMUNN-UNIVERSITY-MANAGEMENT" }),
+    label({ label: "JIKMUNN-UNIVERSITY-MANAGEMENT-CORE-PROGRAM" }),
     timestamp(),
     myFormat,
   ),
@@ -28,7 +27,7 @@ const logger = createLogger({
         "logs",
         "winston",
         "successes",
-        "jikmunn-university-management-%DATE%-success.log",
+        "jikmunn-university-management-core-program-%DATE%-success.log",
       ),
       datePattern: "YYYY-DD-MM-HH",
       zippedArchive: true,
@@ -41,7 +40,7 @@ const logger = createLogger({
 const errorlogger = createLogger({
   level: "error",
   format: combine(
-    label({ label: "JIKMUNN-UNIVERSITY-MANAGEMENT" }),
+    label({ label: "JIKMUNN-UNIVERSITY-MANAGEMENT-CORE-PROGRAM" }),
     timestamp(),
     myFormat,
   ),
@@ -53,7 +52,7 @@ const errorlogger = createLogger({
         "logs",
         "winston",
         "errors",
-        "jikmunn-university-management-%DATE%-error.log",
+        "jikmunn-university-management-core-program-%DATE%-error.log",
       ),
       datePattern: "YYYY-DD-MM-HH",
       zippedArchive: true,
