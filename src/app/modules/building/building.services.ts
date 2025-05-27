@@ -10,7 +10,6 @@ const insertIntoDB = async (data: Building): Promise<Building> => {
   const result = await prisma.building.create({
     data,
   });
-
   return result;
 };
 
@@ -70,7 +69,6 @@ const getByIdFromDB = async (id: string): Promise<Building | null> => {
       id,
     },
   });
-
   return result;
 };
 
@@ -84,17 +82,15 @@ const updateOneInDB = async (
     },
     data: payload,
   });
-
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<Building> => {
+const deleteOneFromDB = async (id: string): Promise<Building> => {
   const result = await prisma.building.delete({
     where: {
       id,
     },
   });
-
   return result;
 };
 
@@ -103,5 +99,5 @@ export const BuildingServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

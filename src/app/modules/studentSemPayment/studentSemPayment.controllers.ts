@@ -25,7 +25,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );

@@ -48,7 +48,7 @@ router
   .route("/get-my-semsester-courses")
   .get(
     auth(USER_ROLES.STUDENT),
-    SemesterRegistrationControllers.getMySemesterRegCouses,
+    SemesterRegistrationControllers.getMySemesterRegCourses,
   );
 
 router
@@ -70,7 +70,7 @@ router
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    SemesterRegistrationControllers.deleteByIdFromDB,
+    SemesterRegistrationControllers.deleteOneFromDB,
   );
 
 router

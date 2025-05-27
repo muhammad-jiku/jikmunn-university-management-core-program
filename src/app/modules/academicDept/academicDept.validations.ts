@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const createAcademicDepartment = z.object({
+const createAcademicDept = z.object({
   body: z
     .object({
       title: z.string({
@@ -13,7 +13,7 @@ const createAcademicDepartment = z.object({
     .strict(),
 });
 
-const updateAcademicDepartment = z.object({
+const updateAcademicDept = z.object({
   body: z
     .object({
       title: z.string().optional(),
@@ -23,7 +23,7 @@ const updateAcademicDepartment = z.object({
     .optional(),
 });
 
-export const AcademicDepartmentValidations = {
-  createAcademicDepartment,
-  updateAcademicDepartment,
+export const AcademicDeptValidations = {
+  createAcademicDept,
+  updateAcademicDept,
 };

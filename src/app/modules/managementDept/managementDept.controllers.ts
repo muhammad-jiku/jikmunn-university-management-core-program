@@ -18,7 +18,7 @@ const insertIntoDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -42,7 +42,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -61,7 +61,7 @@ const getByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -80,7 +80,7 @@ const updateOneInDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -99,7 +99,7 @@ const deleteByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );

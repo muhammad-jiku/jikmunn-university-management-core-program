@@ -33,7 +33,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -52,7 +52,7 @@ const getByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -72,7 +72,7 @@ const updateIntoDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -91,7 +91,7 @@ const deleteFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -111,7 +111,7 @@ const myCourses = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -134,7 +134,7 @@ const getMyCourseSchedules = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -153,7 +153,7 @@ const myAcademicInfo = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );

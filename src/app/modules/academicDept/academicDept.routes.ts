@@ -2,31 +2,31 @@ import express from "express";
 import { USER_ROLES } from "../../../enums/users";
 import { auth } from "../../middlewares/auth";
 import { validateRequest } from "../../middlewares/validateRequest";
-import { AcademicDepartmentControllers } from "./academicDept.controllers";
-import { AcademicDepartmentValidations } from "./academicDept.validations";
+import { AcademicDeptControllers } from "./academicDept.controllers";
+import { AcademicDeptValidations } from "./academicDept.validations";
 
 const router = express.Router();
 
 router
   .route("/")
   .post(
-    validateRequest(AcademicDepartmentValidations.createAcademicDepartment),
+    validateRequest(AcademicDeptValidations.createAcademicDept),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicDepartmentControllers.insertIntoDB,
+    AcademicDeptControllers.insertIntoDB,
   )
-  .get(AcademicDepartmentControllers.getAllFromDB);
+  .get(AcademicDeptControllers.getAllFromDB);
 
 router
   .route("/:id")
-  .get(AcademicDepartmentControllers.getByIdFromDB)
+  .get(AcademicDeptControllers.getByIdFromDB)
   .patch(
-    validateRequest(AcademicDepartmentValidations.updateAcademicDepartment),
+    validateRequest(AcademicDeptValidations.updateAcademicDept),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicDepartmentControllers.updateOneInDB,
+    AcademicDeptControllers.updateOneInDB,
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicDepartmentControllers.deleteByIdFromDB,
+    AcademicDeptControllers.deleteOneFromDB,
   );
 
-export const AcademicDepartmentRoutes = router;
+export const AcademicDeptRoutes = router;

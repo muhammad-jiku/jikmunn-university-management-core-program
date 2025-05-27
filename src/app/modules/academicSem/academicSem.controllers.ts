@@ -4,13 +4,13 @@ import httpStatus from "http-status";
 import { catchAsync } from "../../../shared/catchAsync";
 import { pick } from "../../../shared/pick";
 import { sendResponse } from "../../../shared/sendResponse";
-import { academicSemesterFilterableFields } from "./academicSem.constants";
-import { AcademicSemesterServices } from "./academicSem.services";
+import { academicSemFilterableFields } from "./academicSem.constants";
+import { AcademicSemServices } from "./academicSem.services";
 
 const insertIntoDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await AcademicSemesterServices.insertIntoDB(req.body);
+      const result = await AcademicSemServices.insertIntoDB(req.body);
 
       sendResponse<AcademicSemester>(res, {
         statusCode: httpStatus.CREATED,
@@ -19,7 +19,7 @@ const insertIntoDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -27,23 +27,20 @@ const insertIntoDB = catchAsync(
 const getAllFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const filters = pick(req.query, academicSemesterFilterableFields);
+      const filters = pick(req.query, academicSemFilterableFields);
       const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
-      const result = await AcademicSemesterServices.getAllFromDB(
-        filters,
-        options,
-      );
+      const result = await AcademicSemServices.getAllFromDB(filters, options);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Academic semseter data fetched successfully!!",
+        message: "Academic semester data fetched successfully!!",
         meta: result.meta,
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -52,7 +49,7 @@ const getByIdFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const result = await AcademicSemesterServices.getByIdFromDB(id);
+      const result = await AcademicSemServices.getByIdFromDB(id);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -61,7 +58,7 @@ const getByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -70,7 +67,7 @@ const updateOneInDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const result = await AcademicSemesterServices.updateOneInDB(id, req.body);
+      const result = await AcademicSemServices.updateOneInDB(id, req.body);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -79,16 +76,16 @@ const updateOneInDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const deleteByIdFromDB = catchAsync(
+const deleteOneFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const result = await AcademicSemesterServices.deleteByIdFromDB(id);
+      const result = await AcademicSemServices.deleteOneFromDB(id);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -97,15 +94,15 @@ const deleteByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-export const AcademicSemeterControllers = {
+export const AcademicSemControllers = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

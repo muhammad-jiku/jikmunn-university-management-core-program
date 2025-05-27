@@ -15,9 +15,8 @@ import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { prisma } from "../../../shared/prisma";
 import { asyncForEach } from "../../../shared/utils";
-import { StudentSemesterPaymentServices } from "../studentSemPayment/studentSemPayment.services";
-
 import { StudentEnrolledCourseMarkServices } from "../studentEnrolledCourseMark/studentEnrolledCourseMark.services";
+import { StudentSemesterPaymentServices } from "../studentSemPayment/studentSemPayment.services";
 import { studentSemesterRegistrationCourseServices } from "../studentSemRegistrationCourse/studentSemRegistrationCourse.services";
 import {
   semesterRegistrationRelationalFields,
@@ -147,6 +146,7 @@ const getByIdFromDB = async (
 };
 
 // UPCOMING > ONGOING  > ENDED
+
 const updateOneInDB = async (
   id: string,
   payload: Partial<SemesterRegistration>,
@@ -197,7 +197,7 @@ const updateOneInDB = async (
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<SemesterRegistration> => {
+const deleteOneFromDB = async (id: string): Promise<SemesterRegistration> => {
   const result = await prisma.semesterRegistration.delete({
     where: {
       id,
@@ -462,7 +462,7 @@ const startNewSemester = async (
           const totalSemesterPaymentAmount =
             studentSemReg.totalCreditsTaken * 5000;
 
-          await StudentSemesterPaymentServices.createSemesterPayment(
+          await StudentSemesterPaymentServices.insertIntoDB(
             prismaTransactionClient,
             {
               studentId: studentSemReg.studentId,
@@ -523,7 +523,7 @@ const startNewSemester = async (
                   data: enrolledCourseData,
                 });
 
-              await StudentEnrolledCourseMarkServices.createStudentEnrolledCourseDefaultMark(
+              await StudentEnrolledCourseMarkServices.insertIntoDB(
                 prismaTransactionClient,
                 {
                   studentId: item.studentId,
@@ -543,7 +543,7 @@ const startNewSemester = async (
   };
 };
 
-const getMySemesterRegCouses = async (authUserId: string) => {
+const getMySemesterRegCourses = async (authUserId: string) => {
   const student = await prisma.student.findFirst({
     where: {
       studentId: authUserId,
@@ -644,6 +644,7 @@ const getMySemesterRegCouses = async (authUserId: string) => {
     studentCompletedCourse,
     studentCurrentSemesterTakenCourse,
   );
+
   return availableCourses;
 };
 
@@ -652,12 +653,12 @@ export const SemesterRegistrationServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
   startMyRegistration,
   enrollIntoCourse,
   withdrewFromCourse,
   confirmMyRegistration,
   getMyRegistration,
   startNewSemester,
-  getMySemesterRegCouses,
+  getMySemesterRegCourses,
 };

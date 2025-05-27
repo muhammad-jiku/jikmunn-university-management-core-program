@@ -18,7 +18,7 @@ const insertIntoDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -42,7 +42,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -61,7 +61,7 @@ const getByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -83,17 +83,17 @@ const updateOneInDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const deleteByIdFromDB = catchAsync(
+const deleteOneFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 
-      const result = await SemesterRegistrationServices.deleteByIdFromDB(id);
+      const result = await SemesterRegistrationServices.deleteOneFromDB(id);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -102,7 +102,7 @@ const deleteByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -123,7 +123,7 @@ const startMyRegistration = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -145,7 +145,7 @@ const enrollIntoCourse = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -167,7 +167,7 @@ const withdrawFromCourse = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -188,7 +188,7 @@ const confirmMyRegistration = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -209,7 +209,7 @@ const getMyRegistration = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -229,17 +229,17 @@ const startNewSemester = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const getMySemesterRegCouses = catchAsync(
+const getMySemesterRegCourses = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = req.user;
 
-      const result = await SemesterRegistrationServices.getMySemesterRegCouses(
+      const result = await SemesterRegistrationServices.getMySemesterRegCourses(
         user!.userId,
       );
 
@@ -250,7 +250,7 @@ const getMySemesterRegCouses = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -260,12 +260,12 @@ export const SemesterRegistrationControllers = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
   startMyRegistration,
   enrollIntoCourse,
   withdrawFromCourse,
   confirmMyRegistration,
   getMyRegistration,
   startNewSemester,
-  getMySemesterRegCouses,
+  getMySemesterRegCourses,
 };

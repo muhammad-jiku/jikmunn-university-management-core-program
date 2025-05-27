@@ -19,6 +19,7 @@ const insertIntoDB = async (
 
   // existing: 12:30 - 13:30
   // new slot: 12:50 - 13:50
+
   const result = await prisma.offeredCourseClassSchedule.create({
     data,
     include: {
@@ -119,7 +120,6 @@ const getByIdFromDB = async (
       room: true,
     },
   });
-
   return result;
 };
 
@@ -138,11 +138,10 @@ const updateOneInDB = async (
       room: true,
     },
   });
-
   return result;
 };
 
-const deleteByIdFromDB = async (
+const deleteOneFromDB = async (
   id: string,
 ): Promise<OfferedCourseClassSchedule> => {
   const result = await prisma.offeredCourseClassSchedule.delete({
@@ -155,7 +154,6 @@ const deleteByIdFromDB = async (
       room: true,
     },
   });
-
   return result;
 };
 
@@ -164,5 +162,5 @@ export const OfferedCourseClassScheduleServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

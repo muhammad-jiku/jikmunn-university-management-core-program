@@ -15,9 +15,9 @@ import {
 } from "./offeredCourse.interfaces";
 
 const insertIntoDB = async (
-  data: ICreateOfferedCourse,
+  payload: ICreateOfferedCourse,
 ): Promise<OfferedCourse[]> => {
-  const { academicDepartmentId, semesterRegistrationId, courseIds } = data;
+  const { academicDepartmentId, semesterRegistrationId, courseIds } = payload;
   const result: OfferedCourse[] = [];
 
   await asyncForEach(courseIds, async (courseId: string) => {
@@ -109,6 +109,7 @@ const getAllFromDB = async (
             createdAt: "desc",
           },
   });
+
   const total = await prisma.offeredCourse.count({
     where: whereConditions,
   });
@@ -134,7 +135,6 @@ const getByIdFromDB = async (id: string): Promise<OfferedCourse | null> => {
       academicDepartment: true,
     },
   });
-
   return result;
 };
 
@@ -157,7 +157,7 @@ const updateOneInDB = async (
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<OfferedCourse> => {
+const deleteOneFromDB = async (id: string): Promise<OfferedCourse> => {
   const result = await prisma.offeredCourse.delete({
     where: {
       id,
@@ -177,5 +177,5 @@ export const offeredCourseServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

@@ -11,7 +11,7 @@ import {
 } from "./studentSemPayment.constants";
 import { IStudentSemesterPaymentFilterRequest } from "./studentSemPayment.interfaces";
 
-const createSemesterPayment = async (
+const insertIntoDB = async (
   prismaClient: Omit<
     PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
     "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
@@ -107,6 +107,7 @@ const getAllFromDB = async (
             createdAt: "desc",
           },
   });
+
   const total = await prisma.studentSemesterPayment.count({
     where: whereConditions,
   });
@@ -122,6 +123,6 @@ const getAllFromDB = async (
 };
 
 export const StudentSemesterPaymentServices = {
-  createSemesterPayment,
+  insertIntoDB,
   getAllFromDB,
 };

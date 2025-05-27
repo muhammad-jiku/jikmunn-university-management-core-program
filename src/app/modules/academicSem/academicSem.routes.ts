@@ -2,31 +2,31 @@ import express from "express";
 import { USER_ROLES } from "../../../enums/users";
 import { auth } from "../../middlewares/auth";
 import { validateRequest } from "../../middlewares/validateRequest";
-import { AcademicSemeterControllers } from "./academicSem.controllers";
-import { AcademicSemesterValidations } from "./academicSem.validations";
+import { AcademicSemControllers } from "./academicSem.controllers";
+import { AcademicSemValidations } from "./academicSem.validations";
 
 const router = express.Router();
 
 router
   .route("/")
   .post(
-    validateRequest(AcademicSemesterValidations.createAcademicSemester),
+    validateRequest(AcademicSemValidations.createAcademicSem),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicSemeterControllers.insertIntoDB,
+    AcademicSemControllers.insertIntoDB,
   )
-  .get(AcademicSemeterControllers.getAllFromDB);
+  .get(AcademicSemControllers.getAllFromDB);
 
 router
   .route("/:id")
-  .get(AcademicSemeterControllers.getByIdFromDB)
+  .get(AcademicSemControllers.getByIdFromDB)
   .patch(
-    validateRequest(AcademicSemesterValidations.updateAcademicSemester),
+    validateRequest(AcademicSemValidations.updateAcademicSem),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicSemeterControllers.updateOneInDB,
+    AcademicSemControllers.updateOneInDB,
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    AcademicSemeterControllers.deleteByIdFromDB,
+    AcademicSemControllers.deleteOneFromDB,
   );
 
-export const AcademicSemesterRoutes = router;
+export const AcademicSemRoutes = router;

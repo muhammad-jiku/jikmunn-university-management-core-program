@@ -1,20 +1,16 @@
-export const academicDepartmentFilterableFields: string[] = [
+export const academicDeptFilterableFields: string[] = [
   "searchTerm",
   "id",
   "academicFacultyId",
 ];
 
-export const academicDepartmentSearchableFields: string[] = ["title"];
+export const academicDeptSearchableFields: string[] = ["title"];
 
-export const academicDepartmentRelationalFields: string[] = [
-  "academicFacultyId",
-];
-export const academicDepartmentRelationalFieldsMapper: {
-  [key: string]: string;
-} = {
+export const academicDeptRelationalFields: string[] = ["academicFacultyId"];
+export const academicDeptRelationalFieldsMapper: { [key: string]: string } = {
   academicFacultyId: "academicFaculty",
 };
 
-export const EVENT_ACADEMIC_DEPARTMENT_CREATED = "academic-department.created";
-export const EVENT_ACADEMIC_DEPARTMENT_UPDATED = "academic-department.updated";
-export const EVENT_ACADEMIC_DEPARTMENT_DELETED = "academic-department.deleted";
+export const EVENT_ACADEMIC_DEPT_CREATED = "academic-dept.created";
+export const EVENT_ACADEMIC_DEPT_UPDATED = "academic-dept.updated";
+export const EVENT_ACADEMIC_DEPT_DELETED = "academic-dept.deleted";

@@ -1,3 +1,4 @@
+import { Building } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { catchAsync } from "../../../shared/catchAsync";
@@ -11,14 +12,14 @@ const insertIntoDB = catchAsync(
     try {
       const result = await BuildingServices.insertIntoDB(req.body);
 
-      sendResponse(res, {
+      sendResponse<Building>(res, {
         statusCode: httpStatus.CREATED,
         success: true,
         message: "Building created successfully!!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -31,7 +32,7 @@ const getAllFromDB = catchAsync(
 
       const result = await BuildingServices.getAllFromDB(filters, options);
 
-      sendResponse(res, {
+      sendResponse<Building[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Building fetched successfully!!",
@@ -39,7 +40,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -51,14 +52,14 @@ const getByIdFromDB = catchAsync(
 
       const result = await BuildingServices.getByIdFromDB(id);
 
-      sendResponse(res, {
+      sendResponse<Building>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Building fetched successfully!!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -70,33 +71,33 @@ const updateOneInDB = catchAsync(
 
       const result = await BuildingServices.updateOneInDB(id, req.body);
 
-      sendResponse(res, {
+      sendResponse<Building>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Building updated successfully!!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const deleteByIdFromDB = catchAsync(
+const deleteOneFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 
-      const result = await BuildingServices.deleteByIdFromDB(id);
+      const result = await BuildingServices.deleteOneFromDB(id);
 
-      sendResponse(res, {
+      sendResponse<Building>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Building delete successfully",
+        message: "Building deleted successfully!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -106,5 +107,5 @@ export const BuildingControllers = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

@@ -78,6 +78,7 @@ const getAllFromDB = async (
             createdAt: "desc",
           },
   });
+
   const total = await prisma.room.count({
     where: whereConditions,
   });
@@ -122,7 +123,7 @@ const updateOneInDB = async (
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<Room> => {
+const deleteOneFromDB = async (id: string): Promise<Room> => {
   const result = await prisma.room.delete({
     where: {
       id,
@@ -140,5 +141,5 @@ export const RoomServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

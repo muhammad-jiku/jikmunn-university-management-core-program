@@ -13,6 +13,7 @@ export const studentEnrolledCourseRelationalFields: string[] = [
   "studentId",
   "courseId",
 ];
+
 export const studentEnrolledCourseRelationalFieldsMapper: {
   [key: string]: string;
 } = {

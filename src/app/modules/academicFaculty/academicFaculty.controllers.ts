@@ -1,3 +1,4 @@
+import { AcademicFaculty } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { catchAsync } from "../../../shared/catchAsync";
@@ -11,14 +12,14 @@ const insertIntoDB = catchAsync(
     try {
       const result = await AcademicFacultyServices.insertIntoDB(req.body);
 
-      sendResponse(res, {
-        statusCode: httpStatus.CREATED,
+      sendResponse<AcademicFaculty>(res, {
+        statusCode: httpStatus.OK,
         success: true,
-        message: "Academic faculty created successfully!!",
+        message: "Academic Faculty created successfully!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -34,15 +35,15 @@ const getAllFromDB = catchAsync(
         options,
       );
 
-      sendResponse(res, {
+      sendResponse<AcademicFaculty[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Academic faculties fetched successfully!!",
+        message: "Academic Faculties fetched successfully!",
         meta: result.meta,
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -54,14 +55,14 @@ const getByIdFromDB = catchAsync(
 
       const result = await AcademicFacultyServices.getByIdFromDB(id);
 
-      sendResponse(res, {
+      sendResponse<AcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Academic faculty fetched successfully!!",
+        message: "Academic Faculty fetched successfully!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -70,36 +71,35 @@ const updateOneInDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-
       const result = await AcademicFacultyServices.updateOneInDB(id, req.body);
 
-      sendResponse(res, {
+      sendResponse<AcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Academic faculty updated successfully!!",
+        message: "AcademicFaculty updated successfully!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const deleteByIdFromDB = catchAsync(
+const deleteOneFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 
-      const result = await AcademicFacultyServices.deleteByIdFromDB(id);
+      const result = await AcademicFacultyServices.deleteOneFromDB(id);
 
-      sendResponse(res, {
+      sendResponse<AcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Academic faculty deleted successfully!!",
+        message: "Academic Faculty deleted successfully!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -109,5 +109,5 @@ export const AcademicFacultyControllers = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

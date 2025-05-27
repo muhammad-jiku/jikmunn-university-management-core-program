@@ -3,6 +3,7 @@ import { paginationHelpers } from "../../../helpers/paginationHelpers";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { prisma } from "../../../shared/prisma";
+import { RedisClient } from "../../../shared/redis";
 import {
   academicFacultySearchableFields,
   EVENT_ACADEMIC_FACULTY_CREATED,
@@ -10,7 +11,6 @@ import {
   EVENT_ACADEMIC_FACULTY_UPDATED,
 } from "./academicFaculty.constants";
 import { IAcademicFacultyFilterRequest } from "./academicFaculty.interfaces";
-import { RedisClient } from "../../../shared/redis";
 
 const insertIntoDB = async (
   data: AcademicFaculty,
@@ -116,7 +116,7 @@ const updateOneInDB = async (
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<AcademicFaculty> => {
+const deleteOneFromDB = async (id: string): Promise<AcademicFaculty> => {
   const result = await prisma.academicFaculty.delete({
     where: {
       id,
@@ -137,5 +137,5 @@ export const AcademicFacultyServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

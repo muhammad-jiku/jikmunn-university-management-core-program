@@ -17,7 +17,7 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
   const { prerequisiteCourses, ...courseData } = data;
 
   console.log("course data", courseData);
-  console.log("pre requisite course data: ", prerequisiteCourses);
+  console.log("prerequisite course data: ", prerequisiteCourses);
 
   const newCourse = await prisma.$transaction(async (transactionClient) => {
     const result = await transactionClient.course.create({
@@ -43,7 +43,6 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
         },
       );
     }
-
     return result;
   });
 
@@ -160,7 +159,6 @@ const getByIdFromDB = async (id: string): Promise<Course | null> => {
       },
     },
   });
-
   return result;
 };
 
@@ -248,7 +246,7 @@ const updateOneInDB = async (
   return responseData;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<Course> => {
+const deleteOneFromDB = async (id: string): Promise<Course> => {
   await prisma.courseToPrerequisite.deleteMany({
     where: {
       OR: [
@@ -267,11 +265,10 @@ const deleteByIdFromDB = async (id: string): Promise<Course> => {
       id,
     },
   });
-
   return result;
 };
 
-const assignFaculies = async (
+const assignFacultiesIntoDB = async (
   id: string,
   payload: string[],
 ): Promise<CourseFaculty[]> => {
@@ -282,7 +279,7 @@ const assignFaculies = async (
     })),
   });
 
-  const assignFacultiesData = await prisma.courseFaculty.findMany({
+  const assignedFacultiesData = await prisma.courseFaculty.findMany({
     where: {
       courseId: id,
     },
@@ -291,10 +288,10 @@ const assignFaculies = async (
     },
   });
 
-  return assignFacultiesData;
+  return assignedFacultiesData;
 };
 
-const removeFaculties = async (
+const removeFacultiesFromDB = async (
   id: string,
   payload: string[],
 ): Promise<CourseFaculty[] | null> => {
@@ -307,7 +304,7 @@ const removeFaculties = async (
     },
   });
 
-  const assignFacultiesData = await prisma.courseFaculty.findMany({
+  const removedFacultiesData = await prisma.courseFaculty.findMany({
     where: {
       courseId: id,
     },
@@ -316,7 +313,7 @@ const removeFaculties = async (
     },
   });
 
-  return assignFacultiesData;
+  return removedFacultiesData;
 };
 
 export const CourseServices = {
@@ -324,7 +321,7 @@ export const CourseServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
-  assignFaculies,
-  removeFaculties,
+  deleteOneFromDB,
+  assignFacultiesIntoDB,
+  removeFacultiesFromDB,
 };

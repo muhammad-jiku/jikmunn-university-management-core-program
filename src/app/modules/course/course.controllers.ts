@@ -18,7 +18,7 @@ const insertIntoDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -39,7 +39,7 @@ const getAllFromDB = catchAsync(
         data: result.data,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -58,7 +58,7 @@ const getByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -77,17 +77,17 @@ const updateOneInDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const deleteByIdFromDB = catchAsync(
+const deleteOneFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 
-      const result = await CourseServices.deleteByIdFromDB(id);
+      const result = await CourseServices.deleteOneFromDB(id);
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -95,18 +95,18 @@ const deleteByIdFromDB = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const assignFaculies = catchAsync(
+const assignFacultiesIntoDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       console.log(req.body.faculties);
 
-      const result = await CourseServices.assignFaculies(
+      const result = await CourseServices.assignFacultiesIntoDB(
         id,
         req.body.faculties,
       );
@@ -118,18 +118,18 @@ const assignFaculies = catchAsync(
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
 
-const removeFaculties = catchAsync(
+const removeFacultiesFromDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       console.log(req.body.faculties);
 
-      const result = await CourseServices.removeFaculties(
+      const result = await CourseServices.removeFacultiesFromDB(
         id,
         req.body.faculties,
       );
@@ -137,11 +137,11 @@ const removeFaculties = catchAsync(
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Course faculty deleted successfully!!",
+        message: "Course faculty removed successfully!!",
         data: result,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 );
@@ -150,8 +150,8 @@ export const CourseControllers = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
-  deleteByIdFromDB,
   updateOneInDB,
-  assignFaculies,
-  removeFaculties,
+  deleteOneFromDB,
+  assignFacultiesIntoDB,
+  removeFacultiesFromDB,
 };

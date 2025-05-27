@@ -1,18 +1,18 @@
-export const academicSemesterSearchableFields = [
+export const academicSemSearchableFields = [
   "title",
   "code",
   "startMonth",
   "endMonth",
 ];
 
-export const academicSemesterFilterableFields = [
+export const academicSemFilterableFields = [
   "searchTerm",
   "code",
   "startMonth",
   "endMonth",
 ];
 
-export const academicSemesterTitleCodeMapper: {
+export const academicSemTitleCodeMapper: {
   [key: string]: string;
 } = {
   Autumn: "01",
@@ -20,9 +20,9 @@ export const academicSemesterTitleCodeMapper: {
   Fall: "03",
 };
 
-export const academicSemesterTitles: string[] = ["Autumn", "Summer", "Fall"];
-export const academicSemesterCodes: string[] = ["01", "02", "03"];
-export const academicSemesterMonths: string[] = [
+export const academicSemTitles: string[] = ["Autumn", "Summer", "Fall"];
+export const academicSemCodes: string[] = ["01", "02", "03"];
+export const academicSemMonths: string[] = [
   "January",
   "February",
   "March",
@@ -37,6 +37,6 @@ export const academicSemesterMonths: string[] = [
   "December",
 ];
 
-export const EVENT_ACADEMIC_SEMESTER_CREATED = "academic-semester.created";
-export const EVENT_ACADEMIC_SEMESTER_UPDATED = "academic-semester.updated";
-export const EVENT_ACADEMIC_SEMESTER_DELETED = "academic-semester.deleted";
+export const EVENT_ACADEMIC_SEM_CREATED = "academic-sem.created";
+export const EVENT_ACADEMIC_SEM_UPDATED = "academic-sem.updated";
+export const EVENT_ACADEMIC_SEM_DELETED = "academic-sem.deleted";

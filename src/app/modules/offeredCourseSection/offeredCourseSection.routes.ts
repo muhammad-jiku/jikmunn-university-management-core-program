@@ -26,7 +26,7 @@ router
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    OfferedCourseSectionControllers.deleteByIdFromDB,
+    OfferedCourseSectionControllers.deleteOneFromDB,
   );
 
 export const OfferedCourseSectionRoutes = router;

@@ -198,15 +198,14 @@ const getByIdFromDB = async (
       },
     },
   });
-
   return result;
 };
 
-// update
 const updateOneInDB = async (
   id: string,
   payload: Partial<OfferedCourseSection>,
 ): Promise<OfferedCourseSection> => {
+  //update
   const result = await prisma.offeredCourseSection.update({
     where: {
       id,
@@ -220,11 +219,10 @@ const updateOneInDB = async (
       },
     },
   });
-
   return result;
 };
 
-const deleteByIdFromDB = async (id: string): Promise<OfferedCourseSection> => {
+const deleteOneFromDB = async (id: string): Promise<OfferedCourseSection> => {
   const result = await prisma.offeredCourseSection.delete({
     where: {
       id,
@@ -237,7 +235,6 @@ const deleteByIdFromDB = async (id: string): Promise<OfferedCourseSection> => {
       },
     },
   });
-
   return result;
 };
 
@@ -246,5 +243,5 @@ export const OfferedCourseSectionServices = {
   getAllFromDB,
   getByIdFromDB,
   updateOneInDB,
-  deleteByIdFromDB,
+  deleteOneFromDB,
 };

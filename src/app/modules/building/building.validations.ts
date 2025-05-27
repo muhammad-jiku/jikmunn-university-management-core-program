@@ -13,7 +13,9 @@ const createBuilding = z.object({
 const updateBuilding = z.object({
   body: z
     .object({
-      title: z.string().optional(),
+      title: z.string({
+        required_error: "Title is required",
+      }),
     })
     .strict()
     .optional(),

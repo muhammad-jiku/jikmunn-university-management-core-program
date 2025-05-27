@@ -26,7 +26,7 @@ router
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    BuildingControllers.deleteByIdFromDB,
+    BuildingControllers.deleteOneFromDB,
   );
 
 export const BuildingRoutes = router;

@@ -1,4 +1,4 @@
-import { createClient, SetOptions } from "redis";
+import { SetOptions, createClient } from "redis";
 import config from "../config";
 
 const redisClient = createClient({
@@ -13,8 +13,8 @@ const redisSubClient = createClient({
   url: config.redis.url,
 });
 
-// redisClient.on('error', (error) => console.log('RedisError', error));
-// redisClient.on('connect', (error) => console.log('Redis Connected'));
+redisClient.on("error", (error) => console.log("RedisError", error));
+redisClient.on("connect", (error) => console.log("Redis Connected"));
 
 const connect = async (): Promise<void> => {
   await redisClient.connect();
@@ -39,17 +39,17 @@ const del = async (key: string): Promise<void> => {
 };
 
 const setAccessToken = async (userId: string, token: string): Promise<void> => {
-  const key = `accessToken:${userId}`;
+  const key = `access-token:${userId}`;
   await redisClient.set(key, token, { EX: Number(config.redis.expires_in) });
 };
 
 const getAccessToken = async (userId: string): Promise<string | null> => {
-  const key = `accessToken:${userId}`;
+  const key = `access-token:${userId}`;
   return await redisClient.get(key);
 };
 
 const delAccessToken = async (userId: string): Promise<void> => {
-  const key = `accessToken:${userId}`;
+  const key = `access-token:${userId}`;
   await redisClient.del(key);
 };
 

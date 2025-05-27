@@ -15,7 +15,7 @@ import { prisma } from "../../../shared/prisma";
 import { IStudentEnrolledCourseMarkFilterRequest } from "./studentEnrolledCourseMark.interfaces";
 import { StudentEnrolledCourseMarkUtils } from "./studentEnrolledCourseMark.utils";
 
-const createStudentEnrolledCourseDefaultMark = async (
+const insertIntoDB = async (
   prismaClient: Omit<
     PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
     "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
@@ -371,7 +371,7 @@ const getMyCourseMarks = async (
 };
 
 export const StudentEnrolledCourseMarkServices = {
-  createStudentEnrolledCourseDefaultMark,
+  insertIntoDB,
   getAllFromDB,
   updateStudentMarks,
   updateFinalMarks,

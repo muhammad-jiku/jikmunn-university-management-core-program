@@ -26,7 +26,7 @@ router
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    CourseControllers.deleteByIdFromDB,
+    CourseControllers.deleteOneFromDB,
   );
 
 router
@@ -34,14 +34,14 @@ router
   .post(
     validateRequest(CourseValidations.assignOrRemoveFaculties),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-    CourseControllers.assignFaculies,
+    CourseControllers.assignFacultiesIntoDB,
   );
 
 router.delete(
   "/:id/remove-faculties",
   validateRequest(CourseValidations.assignOrRemoveFaculties),
   auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
-  CourseControllers.removeFaculties,
+  CourseControllers.removeFacultiesFromDB,
 );
 
 export const CourseRoutes = router;

@@ -4,31 +4,25 @@ import { z } from "zod";
 const updateStudentMarks = z.object({
   body: z
     .object({
-      academicSemesterId: z
-        .string({
-          required_error: "Academic semester id is required",
-        })
-        .optional(),
-      studentId: z
-        .string({
-          required_error: "Student id is required",
-        })
-        .optional(),
-      courseId: z
-        .string({
-          required_error: "Course id is required",
-        })
-        .optional(),
-      examType: z
-        .enum([...Object.values(ExamType)] as [string, ...string[]], {})
-        .optional(),
+      academicSemesterId: z.string({
+        required_error: "Academic semester id is required",
+      }),
+      studentId: z.string({
+        required_error: "Student id is required",
+      }),
+      courseId: z.string({
+        required_error: "Course id is required",
+      }),
+      examType: z.enum(
+        [...Object.values(ExamType)] as [string, ...string[]],
+        {},
+      ),
       marks: z
         .number({
           required_error: "Marks is required",
         })
         .max(100)
-        .min(0)
-        .optional(),
+        .min(0),
     })
     .strict()
     .optional(),
@@ -37,21 +31,15 @@ const updateStudentMarks = z.object({
 const updateStudentCourseFinalMarks = z.object({
   body: z
     .object({
-      academicSemesterId: z
-        .string({
-          required_error: "Academic semester id is required",
-        })
-        .optional(),
-      studentId: z
-        .string({
-          required_error: "Student id is required",
-        })
-        .optional(),
-      courseId: z
-        .string({
-          required_error: "Course id is required",
-        })
-        .optional(),
+      academicSemesterId: z.string({
+        required_error: "Academic semester id is required",
+      }),
+      studentId: z.string({
+        required_error: "Student id is required",
+      }),
+      courseId: z.string({
+        required_error: "Course id is required",
+      }),
     })
     .strict()
     .optional(),

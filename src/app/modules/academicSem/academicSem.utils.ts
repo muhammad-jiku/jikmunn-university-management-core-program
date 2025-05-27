@@ -2,21 +2,18 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/handleApiError";
 import { prisma } from "../../../shared/prisma";
 
-export const validateDuplicateSemester = async (
-  title: string,
-  year: number,
-) => {
-  const existingSemester = await prisma.academicSemester.findFirst({
+export const validateDuplicateSem = async (title: string, year: number) => {
+  const existingSem = await prisma.academicSemester.findFirst({
     where: {
       title,
       year,
     },
   });
 
-  if (existingSemester) {
+  if (existingSem) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      "Academic semester already exists!",
+      "Academic Semester already exists!",
     );
   }
 };
