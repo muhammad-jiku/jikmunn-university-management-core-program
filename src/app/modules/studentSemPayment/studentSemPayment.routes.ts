@@ -12,4 +12,11 @@ router
     StudentSemesterPaymentControllers.getAllFromDB,
   );
 
-export const studentSemesterPaymentRoutes = router;
+router
+  .route("/initiate-payment")
+  .post(
+    auth(USER_ROLES.STUDENT),
+    StudentSemesterPaymentControllers.initiatePayment,
+  );
+
+export const StudentSemesterPaymentRoutes = router;

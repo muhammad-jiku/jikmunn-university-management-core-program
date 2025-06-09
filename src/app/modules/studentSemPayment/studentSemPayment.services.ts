@@ -1,5 +1,14 @@
-import { Prisma, PrismaClient, StudentSemesterPayment } from "@prisma/client";
+import {
+  PaymentStatus,
+  Prisma,
+  PrismaClient,
+  StudentSemesterPayment,
+} from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import axios from "axios";
+import httpStatus from "http-status";
+import config from "../../../config";
+import ApiError from "../../../errors/handleApiError";
 import { paginationHelpers } from "../../../helpers/paginationHelpers";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
@@ -122,7 +131,121 @@ const getAllFromDB = async (
   };
 };
 
+const initiatePayment = async (payload: any, user: any) => {
+  const student = await prisma.student.findFirst({
+    where: {
+      studentId: user.userId,
+    },
+  });
+
+  if (!student) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Student not found!");
+  }
+
+  const studentSemesterPayment = await prisma.studentSemesterPayment.findFirst({
+    where: {
+      student: {
+        id: student.id,
+      },
+      academicSemester: {
+        id: payload.academicSemesterId,
+      },
+    },
+    include: {
+      academicSemester: true,
+    },
+  });
+
+  if (!studentSemesterPayment) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Payment information not found!",
+    );
+  }
+
+  if (studentSemesterPayment.paymentStatus === PaymentStatus.FULL_PAID) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Already paid!");
+  }
+
+  if (
+    studentSemesterPayment.paymentStatus === PaymentStatus.PARTIAL_PAID &&
+    payload.paymentType !== "FULL"
+  ) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Already partial paid!");
+  }
+
+  const isPendingPaymentExist =
+    await prisma.studentSemesterPaymentHistory.findFirst({
+      where: {
+        studentSemesterPayment: {
+          id: studentSemesterPayment.id,
+        },
+        isPaid: false,
+      },
+    });
+
+  if (isPendingPaymentExist) {
+    const paymentResponse = await axios.post(
+      config.initPaymentEndpoint || "http://localhost:3000/api/v1/payment/init",
+      {
+        amount: isPendingPaymentExist.dueAmount,
+        transactionId: isPendingPaymentExist.transactionId,
+        studentName: `${student.firstName} ${student.lastName}`,
+        studentId: student.studentId,
+        studentEmail: student.email,
+        address: "Dhaka, Bangladesh",
+        phone: student.contactNo,
+      },
+    );
+
+    return {
+      paymentUrl: paymentResponse.data,
+      paymentDetails: isPendingPaymentExist,
+    };
+  }
+
+  let payableAmount = 0;
+  if (
+    payload.paymentType === "PARTIAL" &&
+    studentSemesterPayment.totalPaidAmount === 0
+  ) {
+    payableAmount = studentSemesterPayment.partialPaymentAmount as number;
+  } else {
+    payableAmount = studentSemesterPayment.totalDueAmount as number;
+  }
+
+  const dataToInsert = {
+    studentSemesterPaymentId: studentSemesterPayment.id,
+    transactionId: `${student.studentId}-${studentSemesterPayment.academicSemester.title}-${Date.now()}`,
+    dueAmount: payableAmount,
+    paidAmount: 0,
+  };
+
+  const studentSemesterPaymentHistory =
+    await prisma.studentSemesterPaymentHistory.create({
+      data: dataToInsert,
+    });
+
+  const paymentResponse = await axios.post(
+    config.initPaymentEndpoint || "http://localhost:3000/api/v1/payment/init",
+    {
+      amount: studentSemesterPaymentHistory.dueAmount,
+      transactionId: studentSemesterPaymentHistory.transactionId,
+      studentName: `${student.firstName} ${student.lastName}`,
+      studentId: student.studentId,
+      studentEmail: student.email,
+      address: "Dhaka, Bangladesh",
+      phone: student.contactNo,
+    },
+  );
+  return {
+    paymentUrl: paymentResponse.data,
+    paymentDetails: isPendingPaymentExist,
+  };
+};
+
 export const StudentSemesterPaymentServices = {
   insertIntoDB,
   getAllFromDB,
+  initiatePayment,
 };

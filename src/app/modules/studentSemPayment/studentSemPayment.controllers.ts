@@ -30,6 +30,29 @@ const getAllFromDB = catchAsync(
   },
 );
 
+const initiatePayment = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = (req as any).user;
+      console.log(user);
+      const result = await StudentSemesterPaymentServices.initiatePayment(
+        req.body,
+        user,
+      );
+
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Payment initiated!",
+        data: result,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
 export const StudentSemesterPaymentControllers = {
   getAllFromDB,
+  initiatePayment,
 };

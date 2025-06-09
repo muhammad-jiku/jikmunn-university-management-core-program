@@ -20,7 +20,7 @@ export default {
     refresh_secret: process.env.JWT_REFRESH_SECRET,
     refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
   },
-  // initPaymentEndpoint: process.env.INIT_PAYMENT_URL,
+  initPaymentEndpoint: process.env.INIT_PAYMENT_URL,
   redis: {
     url: process.env.REDIS_URL,
     expires_in: process.env.REDIS_TOKEN_EXPIRES_IN,
