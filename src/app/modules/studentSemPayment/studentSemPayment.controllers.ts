@@ -52,7 +52,54 @@ const initiatePayment = catchAsync(
   },
 );
 
+const completePayment = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await StudentSemesterPaymentServices.completePayment(
+        req.body,
+      );
+
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Payment completed!",
+        data: result,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
+const getMySemesterPayments = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filters = pick(req.query, studentSemesterPaymentFilterableFields);
+      const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+      const user = (req as any).user;
+
+      const result = await StudentSemesterPaymentServices.getMySemesterPayments(
+        filters,
+        options,
+        user,
+      );
+
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Student semester payment fetched successfully",
+        meta: result.meta,
+        data: result.data,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
 export const StudentSemesterPaymentControllers = {
   getAllFromDB,
   initiatePayment,
+  completePayment,
+  getMySemesterPayments,
 };

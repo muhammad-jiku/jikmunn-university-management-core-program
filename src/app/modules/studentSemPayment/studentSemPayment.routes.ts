@@ -13,10 +13,24 @@ router
   );
 
 router
+  .route("/my-semester-payments")
+  .get(
+    auth(USER_ROLES.STUDENT),
+    StudentSemesterPaymentControllers.getMySemesterPayments,
+  );
+
+router
   .route("/initiate-payment")
   .post(
     auth(USER_ROLES.STUDENT),
     StudentSemesterPaymentControllers.initiatePayment,
+  );
+
+router
+  .route("/complete-payment")
+  .post(
+    auth(USER_ROLES.STUDENT),
+    StudentSemesterPaymentControllers.completePayment,
   );
 
 export const StudentSemesterPaymentRoutes = router;
