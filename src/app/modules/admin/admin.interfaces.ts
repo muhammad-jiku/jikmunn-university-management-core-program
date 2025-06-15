@@ -1,3 +1,5 @@
+import { BloodGroup, Gender } from "@prisma/client";
+
 // Filter request type for querying admins
 export type IAdminFilterRequest = {
   searchTerm?: string;
@@ -18,8 +20,8 @@ export type AdminCreatedEvent = {
     middleName?: string;
   };
   dateOfBirth: string;
-  gender: string;
-  bloodGroup: string;
+  gender: Gender;
+  bloodGroup: BloodGroup;
   designation: string;
   email: string;
   contactNo: string;

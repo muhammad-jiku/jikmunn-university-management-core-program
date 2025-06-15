@@ -1,3 +1,5 @@
+import { BloodGroup, Gender } from "@prisma/client";
+
 export type IStudentFilterRequest = {
   searchTerm?: string | undefined;
   academicFacultyId?: string | undefined;
@@ -28,8 +30,8 @@ export type StudentCreatedEvent = {
     middleName?: string;
   };
   dateOfBirth: string;
-  gender: string;
-  bloodGroup: string;
+  gender: Gender;
+  bloodGroup: BloodGroup;
   email: string;
   contactNo: string;
   profileImage: string;
